@@ -1,4 +1,4 @@
-import { HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
@@ -44,5 +44,20 @@ export class UsersService {
       return { err: 'incorrect password', status: HttpStatus.BAD_REQUEST };
     }
     return { err: 'user with email not found', status: HttpStatus.NOT_FOUND };
+  }
+  async getUsers() {
+    return await this.userModel.find({});
+  }
+  async getUserById(id: number): Promise<User> {
+    return await this.userModel.findOne({ _id: id });
+  }
+  async DeleteUser(id: number) {
+    const findUser = await this.userModel.findById({ _id: id });
+    if (!findUser)
+      return new HttpException(
+        'user with id does not exits',
+        HttpStatus.NOT_FOUND,
+      );
+    return this.userModel.deleteOne({ _id: id });
   }
 }
