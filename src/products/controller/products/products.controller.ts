@@ -23,7 +23,6 @@ export class ProductsController {
   async create(@Body() productData: ProductsDto) {
     const newProduct = await this.productService.createproduct(productData);
     if (newProduct) return { msg: 'Product Created' };
-    console.log('newProduct');
     return new HttpException('product already exit', HttpStatus.BAD_REQUEST);
   }
   @Get()
