@@ -1,8 +1,8 @@
-import { Contains, CONTAINS, IsNotEmpty } from "class-validator";
+import { Contains, IsNotEmpty } from 'class-validator';
 
 export class ordersDto {
-    @IsNotEmpty()
-    fullName: string;
+  @IsNotEmpty()
+  fullName: string;
 
   @IsNotEmpty()
   @Contains('+')

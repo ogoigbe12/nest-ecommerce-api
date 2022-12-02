@@ -36,4 +36,7 @@ export class OrderService {
   async updateOrder() {
     return await this.orderModel.find({});
   }
+  async makePayment() {
+    return await this.orderModel.create();
+  }
 }

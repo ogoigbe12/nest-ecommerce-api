@@ -5,6 +5,7 @@ import { UsersModule } from './users/users.module';
 import { ProductsModule } from './products/products.module';
 import { OrderModule } from './order/order.module';
 import { CartModule } from './cart/cart.module';
+import { StripeModule } from './stripe/stripe.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { CartModule } from './cart/cart.module';
     ProductsModule,
     OrderModule,
     CartModule,
+    StripeModule,
   ],
   controllers: [],
   providers: [],

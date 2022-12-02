@@ -23,6 +23,12 @@ export class OrderController {
     if (newOrder) return { msg: 'Order Placed' };
     return new HttpException('Order already exit', HttpStatus.BAD_REQUEST);
   }
+  // @Post('payment')
+  // async newPayment(@Body() payment: any) {
+  //   const newPayment = await this.paystack.createPaymant(payment.email);
+  //   if (newPayment) return { data: newPayment };
+  //   return new HttpException('payment already exit', HttpStatus.BAD_REQUEST);
+  // }
   @Get()
   async getAllOrder() {
     const order = await this.orderService.getOrders();
