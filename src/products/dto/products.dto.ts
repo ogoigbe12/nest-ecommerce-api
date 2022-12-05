@@ -19,4 +19,6 @@ export class ProductsDto {
 
   @IsNotEmpty()
   price: number;
+
+  image: string;
 }

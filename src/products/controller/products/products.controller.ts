@@ -7,10 +7,14 @@ import {
   HttpStatus,
   Param,
   Post,
+  Put,
   Query,
+  UploadedFile,
+  UseInterceptors,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { FilterProductDto } from 'src/products/dto/filter-product.dto';
 import { ProductsDto } from 'src/products/dto/products.dto';
 import { ProductsService } from 'src/products/service/products/products.service';
@@ -24,6 +28,17 @@ export class ProductsController {
     const newProduct = await this.productService.createproduct(productData);
     if (newProduct) return { msg: 'Product Created' };
     return new HttpException('product already exit', HttpStatus.BAD_REQUEST);
+  }
+  @Post('upload/:id')
+  @UseInterceptors(FileInterceptor('file'))
+  async uploadNew(
+    @UploadedFile() file: Express.Multer.File,
+    @Param('id') id: number,
+  ) {
+    // console.log(file);
+
+    const newUpload = await this.productService.uploadToCloudinary(file, id);
+    return newUpload;
   }
   @Get()
   async getAllProducts(@Query() filterProductsDTO: FilterProductDto) {
@@ -43,6 +58,19 @@ export class ProductsController {
     if (!getOne)
       throw new HttpException('Product does not exit', HttpStatus.NOT_FOUND);
     return getOne;
+  }
+  @Put('/update/:id')
+  async updateProduct(
+    @Param('id') id: number,
+    @Body() productDto: ProductsDto,
+  ) {
+    const updateProductNew = await this.productService.updateProduct(
+      id,
+      productDto,
+    );
+    if (!updateProductNew)
+      throw new HttpException('product does not exit', HttpStatus.BAD_REQUEST);
+    return updateProductNew;
   }
   @Delete(':id')
   deleteProduct(@Param('id') id: number) {

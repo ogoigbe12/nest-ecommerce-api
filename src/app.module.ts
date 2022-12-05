@@ -6,6 +6,7 @@ import { ProductsModule } from './products/products.module';
 import { OrderModule } from './order/order.module';
 import { CartModule } from './cart/cart.module';
 import { StripeModule } from './stripe/stripe.module';
+import { CloudinaryModule } from './cloudinary/cloudinary.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { StripeModule } from './stripe/stripe.module';
     OrderModule,
     CartModule,
     StripeModule,
+    CloudinaryModule,
   ],
   controllers: [],
   providers: [],

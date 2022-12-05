@@ -1,6 +1,12 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  HttpException,
+  HttpStatus,
+  Injectable,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { ServiceService } from 'src/cloudinary/service/service.service';
 import { FilterProductDto } from 'src/products/dto/filter-product.dto';
 import { ProductsDto } from 'src/products/dto/products.dto';
 import {
@@ -12,6 +18,7 @@ import {
 export class ProductsService {
   constructor(
     @InjectModel(Products.name) private productModel: Model<productsDocument>,
+    private cloudinary: ServiceService,
   ) {}
   async createproduct(productDetailes: ProductsDto) {
     const findProduct = await this.productModel.findOne({
@@ -59,5 +66,33 @@ export class ProductsService {
         HttpStatus.NOT_FOUND,
       );
     return this.productModel.deleteOne({ _id: id });
+  }
+  async updateProduct(id: number, productDto: ProductsDto) {
+    const updateProductCart = await this.productModel.updateOne(
+      {
+        id: id,
+      },
+      productDto,
+    );
+    return updateProductCart;
+  }
+  async uploadToCloudinary(file: Express.Multer.File, id: number) {
+    const product = await this.productModel.findOne({ _id: id });
+    console.log(product);
+    console.log(file);
+    if (!product) {
+      const image = await this.cloudinary.uploadFile(file).catch(() => {
+        // console.log(e);
+        throw new BadRequestException('Invalid file type.');
+      });
+      console.log(image);
+      const updateProductCart = await this.productModel.updateOne(
+        {
+          id: product.id,
+        },
+        image.url,
+      );
+      return updateProductCart;
+    }
   }
 }
